@@ -4,6 +4,7 @@ import { Signup } from '@/pages/auth/Signup'
 import { Unauthorized } from '@/pages/common/Unauthorized'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from './ProtectedRoute'
+import { EmployeeDashboard } from '@/pages/employee/EmployeeDashboard'
 
 export function AppRoutes() {
   return (
@@ -14,7 +15,7 @@ export function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={['EMPLOYEE']} />}>
         <Route element={<AppLayout />}>
-          <Route path="/employee/dashboard" element={<div className="font-semibold text-xl text-slate-800">Employee Dashboard</div>} />
+          <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
           <Route path="/employee/profile" element={<div className="font-semibold text-xl text-slate-800">Employee Profile</div>} />
           <Route path="/employee/attendance" element={<div className="font-semibold text-xl text-slate-800">Attendance History</div>} />
           <Route path="/employee/leave" element={<div className="font-semibold text-xl text-slate-800">Leave Requests</div>} />
