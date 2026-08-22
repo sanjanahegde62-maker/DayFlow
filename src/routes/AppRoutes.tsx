@@ -12,6 +12,8 @@ import { EmployeeAttendance } from '@/pages/employee/EmployeeAttendance'
 import { AdminAttendance } from '@/pages/admin/AdminAttendance'
 import { EmployeeLeave } from '@/pages/employee/EmployeeLeave'
 import { AdminLeave } from '@/pages/admin/AdminLeave'
+import { EmployeePayroll } from '@/pages/employee/EmployeePayroll'
+import { AdminPayroll } from '@/pages/admin/AdminPayroll'
 
 export function AppRoutes() {
   return (
@@ -26,7 +28,7 @@ export function AppRoutes() {
           <Route path="/employee/profile" element={<EmployeeProfile />} />
           <Route path="/employee/attendance" element={<EmployeeAttendance />} />
           <Route path="/employee/leave" element={<EmployeeLeave />} />
-          <Route path="/employee/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Details</div>} />
+          <Route path="/employee/payroll" element={<EmployeePayroll />} />
         </Route>
       </Route>
 
@@ -36,7 +38,7 @@ export function AppRoutes() {
           <Route path="/admin/employees" element={<EmployeeList />} />
           <Route path="/admin/attendance" element={<AdminAttendance />} />
           <Route path="/admin/leave-approvals" element={<AdminLeave />} />
-          <Route path="/admin/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Management</div>} />
+          <Route path="/admin/payroll" element={<AdminPayroll />} />
           <Route path="/admin/reports" element={<div className="font-semibold text-xl text-slate-800">Reports &amp; Analytics</div>} />
         </Route>
       </Route>
