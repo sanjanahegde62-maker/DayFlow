@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from 'axios'
+﻿import axios, { AxiosHeaders } from 'axios'
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api',
@@ -18,7 +18,7 @@ apiClient.interceptors.request.use((config) => {
     if (parsed.token) {
       config.headers = AxiosHeaders.from({
         ...(config.headers ?? {}),
-        Authorization: `Bearer ${parsed.token}`,
+        Authorization: 'Bearer ' + parsed.token,
       })
     }
   } catch {

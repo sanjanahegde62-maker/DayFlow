@@ -45,7 +45,17 @@ export const leaveService = {
             await new Promise((res) => setTimeout(res, 300));
             return mockLeaves.filter((l) => l.userId === 'usr_emp_1');
         }
+        // deprecated, kept for compatibility
         const response = await apiClient.get<LeaveRequest[]>('/leaves/me');
+        return response.data;
+    },
+
+    async getLeavesByEmployeeId(employeeId: number): Promise<LeaveRequest[]> {
+        if (USE_MOCK) {
+            await new Promise((res) => setTimeout(res, 300));
+            return mockLeaves.filter((l) => l.userId === 'usr_emp_1');
+        }
+        const response = await apiClient.get<LeaveRequest[]>(`/leaves/employee/${employeeId}`);
         return response.data;
     },
 
@@ -54,25 +64,29 @@ export const leaveService = {
             await new Promise((res) => setTimeout(res, 300));
             return mockLeaves;
         }
-        const response = await apiClient.get<LeaveRequest[]>('/leaves');
+        // backend exposes pending list for admin use
+        const response = await apiClient.get<LeaveRequest[]>('/leaves/pending');
         return response.data;
     },
 
-    async applyLeave(data: Omit<LeaveRequest, 'id' | 'userId' | 'userName' | 'status' | 'appliedOn'>): Promise<LeaveRequest> {
+    async applyLeave(employeeId: number, data: { startDate: string; endDate: string; reason: string; leaveType?: string }): Promise<LeaveRequest> {
         if (USE_MOCK) {
             await new Promise((res) => setTimeout(res, 400));
             const newLeave: LeaveRequest = {
-                ...data,
                 id: `lv_${Date.now()}`,
                 userId: 'usr_emp_1',
                 userName: 'John Doe',
+                leaveType: (data.leaveType as any) ?? 'CASUAL',
+                startDate: data.startDate,
+                endDate: data.endDate,
+                reason: data.reason,
                 status: 'PENDING',
                 appliedOn: new Date().toISOString().split('T')[0],
             };
             mockLeaves.unshift(newLeave);
             return newLeave;
         }
-        const response = await apiClient.post<LeaveRequest>('/leaves', data);
+        const response = await apiClient.post<LeaveRequest>(`/leaves/employee/${employeeId}`, data);
         return response.data;
     },
 
@@ -83,7 +97,7 @@ export const leaveService = {
             if (target) target.status = status;
             return target || mockLeaves[0];
         }
-        const response = await apiClient.patch<LeaveRequest>(`/leaves/${id}/status`, { status });
+        const response = await apiClient.put<LeaveRequest>(`/leaves/${id}/status`, null, { params: { status } });
         return response.data;
     },
 };

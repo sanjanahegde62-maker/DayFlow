@@ -29,8 +29,36 @@ export const payrollService = {
             await new Promise((resolve) => setTimeout(resolve, 300))
             return mockPayslips.filter((payslip) => payslip.userId === 'usr_emp_1')
         }
+        // deprecated: frontend should call getPayrollByEmployeeId with numeric id
         const response = await apiClient.get<Payslip[]>('/payroll/me')
         return response.data
+    },
+
+    async getPayrollByEmployeeId(employeeId: number): Promise<Payslip | null> {
+        if (USE_MOCK) {
+            await new Promise((resolve) => setTimeout(resolve, 300))
+            const found = mockPayslips.find((p) => p.userId === 'usr_emp_1')
+            return found || null
+        }
+        const response = await apiClient.get<any>(`/payroll/employee/${employeeId}`)
+        // backend returns a single Payroll entity; map to Payslip shape conservatively
+        const payroll = response.data
+        if (!payroll) return null
+        const payslip: Payslip = {
+            id: String(payroll.id),
+            userId: payroll.employee?.id ? String(payroll.employee.id) : String(employeeId),
+            userName: payroll.employee?.name ?? '',
+            month: payroll.month ?? '',
+            year: payroll.year ?? new Date().getFullYear(),
+            basicSalary: Number(payroll.basicSalary ?? 0),
+            hra: Number(payroll.hra ?? 0),
+            allowances: Number(payroll.allowances ?? 0),
+            deductions: Number(payroll.deductions ?? 0),
+            netSalary: Number(payroll.netSalary ?? 0),
+            status: (payroll.status as any) ?? 'PAID',
+            generatedOn: payroll.generatedOn ?? '',
+        }
+        return payslip
     },
 
     async getAllPayslips(): Promise<Payslip[]> {
