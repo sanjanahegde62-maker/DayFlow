@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { AlertCircle, UserPlus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/context/useAuth'
+import { useAuth } from '@/context/AuthContext'
 import { authService } from '@/services/api/auth.service'
 import type { Role } from '@/types'
 

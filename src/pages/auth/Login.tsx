@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AlertCircle, LogIn } from 'lucide-react'
-import { useAuth } from '@/context/useAuth'
+import { useAuth } from '@/context/AuthContext'
 import { authService } from '@/services/api/auth.service'
 
 export const Login: React.FC = () => {
