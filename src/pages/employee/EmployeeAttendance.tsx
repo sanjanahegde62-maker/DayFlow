@@ -1,26 +1,63 @@
 import { useEffect, useState } from 'react'
 import { CheckCircle2, Clock } from 'lucide-react'
 import { attendanceService, type AttendanceRecord } from '@/services/api/attendance.service'
+import { useAuth } from '@/context/AuthContext'
+import { employeeService } from '@/services/api/employee.service'
 
 export function EmployeeAttendance() {
+    const { user } = useAuth()
     const [records, setRecords] = useState<AttendanceRecord[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [isCheckedIn, setIsCheckedIn] = useState(true)
+    const [employeeId, setEmployeeId] = useState<number | null>(null)
 
     useEffect(() => {
-        attendanceService.getMyAttendance()
-            .then(setRecords)
-            .catch(() => setError('Unable to load attendance logs.'))
-            .finally(() => setLoading(false))
-    }, [])
+        let mounted = true
+        async function load() {
+            setLoading(true)
+            setError('')
+            try {
+                // Resolve numeric employee id by matching logged in user's email with employees list
+                const employees = await employeeService.getAllEmployees()
+                const matched = employees.find((e) => e.email === user?.email)
+                const id = matched ? Number((matched as any).id) : null
+                if (!mounted) return
+                setEmployeeId(id)
+                if (id == null) {
+                    setRecords([])
+                    return
+                }
+                const data = await attendanceService.getAttendanceByEmployeeId(id)
+                if (!mounted) return
+                setRecords(data)
+                // determine checkedIn state from latest record
+                setIsCheckedIn(data.length > 0 ? !!data[0].checkOut === false : false)
+            } catch (e) {
+                console.error('Attendance load error', e)
+                if (!mounted) return
+                setError('Unable to load attendance logs.')
+            } finally {
+                if (!mounted) return
+                setLoading(false)
+            }
+        }
+        load()
+        return () => { mounted = false }
+    }, [user])
 
     const handleToggleAttendance = async () => {
+        if (employeeId == null) {
+            setError('Employee record not found.')
+            return
+        }
         try {
-            const record = isCheckedIn ? await attendanceService.checkOut() : await attendanceService.checkIn()
+            setError('')
+            const record = isCheckedIn ? await attendanceService.checkOut(employeeId) : await attendanceService.checkIn(employeeId)
             setRecords((currentRecords) => isCheckedIn ? currentRecords.map((item, index) => index === 0 ? record : item) : [record, ...currentRecords])
             setIsCheckedIn((current) => !current)
-        } catch {
+        } catch (err) {
+            console.error('Attendance update error', err)
             setError('Unable to update attendance right now.')
         }
     }

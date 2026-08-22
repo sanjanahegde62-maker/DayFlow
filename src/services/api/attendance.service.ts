@@ -24,7 +24,17 @@ export const attendanceService = {
             await new Promise((resolve) => setTimeout(resolve, 300))
             return mockAttendance.filter((record) => record.userId === 'usr_emp_1')
         }
+        // Deprecated: frontend should call getAttendanceByEmployeeId with a numeric employee id
         const response = await apiClient.get<AttendanceRecord[]>('/attendance/me')
+        return response.data
+    },
+
+    async getAttendanceByEmployeeId(employeeId: number): Promise<AttendanceRecord[]> {
+        if (USE_MOCK) {
+            await new Promise((resolve) => setTimeout(resolve, 300))
+            return mockAttendance.filter((record) => record.userId === 'usr_emp_1')
+        }
+        const response = await apiClient.get<AttendanceRecord[]>(`/attendance/employee/${employeeId}`)
         return response.data
     },
 
@@ -37,21 +47,21 @@ export const attendanceService = {
         return response.data
     },
 
-    async checkIn(): Promise<AttendanceRecord> {
+    async checkIn(employeeId: number): Promise<AttendanceRecord> {
         if (USE_MOCK) {
             await new Promise((resolve) => setTimeout(resolve, 400))
             return { id: `att_${Date.now()}`, userId: 'usr_emp_1', date: new Date().toISOString().split('T')[0], checkIn: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), status: 'PRESENT' }
         }
-        const response = await apiClient.post<AttendanceRecord>('/attendance/check-in')
+        const response = await apiClient.post<AttendanceRecord>(`/attendance/check-in/${employeeId}`)
         return response.data
     },
 
-    async checkOut(): Promise<AttendanceRecord> {
+    async checkOut(employeeId: number): Promise<AttendanceRecord> {
         if (USE_MOCK) {
             await new Promise((resolve) => setTimeout(resolve, 400))
             return { ...mockAttendance[0], checkOut: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), workHours: 8 }
         }
-        const response = await apiClient.post<AttendanceRecord>('/attendance/check-out')
+        const response = await apiClient.post<AttendanceRecord>(`/attendance/check-out/${employeeId}`)
         return response.data
     },
 }
