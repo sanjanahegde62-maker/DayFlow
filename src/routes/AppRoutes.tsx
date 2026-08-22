@@ -5,6 +5,7 @@ import { Unauthorized } from '@/pages/common/Unauthorized'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from './ProtectedRoute'
 import { EmployeeDashboard } from '@/pages/employee/EmployeeDashboard'
+import { AdminDashboard } from '@/pages/admin/AdminDashboard'
 
 export function AppRoutes() {
   return (
@@ -25,7 +26,7 @@ export function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={['HR', 'ADMIN']} />}>
         <Route element={<AppLayout />}>
-          <Route path="/admin/dashboard" element={<div className="font-semibold text-xl text-slate-800">Admin Dashboard</div>} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/employees" element={<div className="font-semibold text-xl text-slate-800">Employee Directory</div>} />
           <Route path="/admin/attendance" element={<div className="font-semibold text-xl text-slate-800">Company Attendance</div>} />
           <Route path="/admin/leave-approvals" element={<div className="font-semibold text-xl text-slate-800">Leave Approvals</div>} />
