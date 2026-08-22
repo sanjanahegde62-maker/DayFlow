@@ -8,6 +8,8 @@ import { EmployeeDashboard } from '@/pages/employee/EmployeeDashboard'
 import { AdminDashboard } from '@/pages/admin/AdminDashboard'
 import { EmployeeProfile } from '@/pages/employee/EmployeeProfile'
 import { EmployeeList } from '@/pages/admin/EmployeeList'
+import { EmployeeAttendance } from '@/pages/employee/EmployeeAttendance'
+import { AdminAttendance } from '@/pages/admin/AdminAttendance'
 
 export function AppRoutes() {
   return (
@@ -20,7 +22,7 @@ export function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
           <Route path="/employee/profile" element={<EmployeeProfile />} />
-          <Route path="/employee/attendance" element={<div className="font-semibold text-xl text-slate-800">Attendance History</div>} />
+          <Route path="/employee/attendance" element={<EmployeeAttendance />} />
           <Route path="/employee/leave" element={<div className="font-semibold text-xl text-slate-800">Leave Requests</div>} />
           <Route path="/employee/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Details</div>} />
         </Route>
@@ -30,7 +32,7 @@ export function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/employees" element={<EmployeeList />} />
-          <Route path="/admin/attendance" element={<div className="font-semibold text-xl text-slate-800">Company Attendance</div>} />
+          <Route path="/admin/attendance" element={<AdminAttendance />} />
           <Route path="/admin/leave-approvals" element={<div className="font-semibold text-xl text-slate-800">Leave Approvals</div>} />
           <Route path="/admin/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Management</div>} />
           <Route path="/admin/reports" element={<div className="font-semibold text-xl text-slate-800">Reports &amp; Analytics</div>} />
