@@ -1,6 +1,7 @@
 package com.dayflow.backend.service;
 
 import com.dayflow.backend.entity.Employee;
+import com.dayflow.backend.exception.ResourceNotFoundException;
 import com.dayflow.backend.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,8 @@ public class EmployeeService {
 
     public Employee getEmployeeById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
     public Employee updateEmployee(Long id, Employee employee) {
