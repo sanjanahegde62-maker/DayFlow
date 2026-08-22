@@ -6,6 +6,8 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from './ProtectedRoute'
 import { EmployeeDashboard } from '@/pages/employee/EmployeeDashboard'
 import { AdminDashboard } from '@/pages/admin/AdminDashboard'
+import { EmployeeProfile } from '@/pages/employee/EmployeeProfile'
+import { EmployeeList } from '@/pages/admin/EmployeeList'
 
 export function AppRoutes() {
   return (
@@ -17,7 +19,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['EMPLOYEE']} />}>
         <Route element={<AppLayout />}>
           <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
-          <Route path="/employee/profile" element={<div className="font-semibold text-xl text-slate-800">Employee Profile</div>} />
+          <Route path="/employee/profile" element={<EmployeeProfile />} />
           <Route path="/employee/attendance" element={<div className="font-semibold text-xl text-slate-800">Attendance History</div>} />
           <Route path="/employee/leave" element={<div className="font-semibold text-xl text-slate-800">Leave Requests</div>} />
           <Route path="/employee/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Details</div>} />
@@ -27,7 +29,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['HR', 'ADMIN']} />}>
         <Route element={<AppLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/employees" element={<div className="font-semibold text-xl text-slate-800">Employee Directory</div>} />
+          <Route path="/admin/employees" element={<EmployeeList />} />
           <Route path="/admin/attendance" element={<div className="font-semibold text-xl text-slate-800">Company Attendance</div>} />
           <Route path="/admin/leave-approvals" element={<div className="font-semibold text-xl text-slate-800">Leave Approvals</div>} />
           <Route path="/admin/payroll" element={<div className="font-semibold text-xl text-slate-800">Payroll Management</div>} />
