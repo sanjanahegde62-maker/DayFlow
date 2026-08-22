@@ -36,6 +36,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['HR', 'ADMIN']} />}>
         <Route element={<AppLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/profile" element={<EmployeeProfile />} />
           <Route path="/admin/employees" element={<EmployeeList />} />
           <Route path="/admin/attendance" element={<AdminAttendance />} />
           <Route path="/admin/leave-approvals" element={<AdminLeave />} />
