@@ -1,75 +1,69 @@
-# React + TypeScript + Vite
+﻿# DayFlow HRMS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DayFlow is a human resource management system built for employee self-service and HR operations. The application provides employee dashboards, attendance tracking, leave requests, payroll access, and administrative management workflows in a single web experience.
 
-Currently, two official plugins are available:
+## Features
+- Employee login and secure authentication
+- Employee dashboard with overview cards and quick status summaries
+- Profile management for personal and contact details
+- Attendance check-in/check-out tracking
+- Leave request submission and status tracking
+- Payroll and payslip overview
+- HR dashboard for attendance and payroll oversight
+- Protected routes based on user role and session state
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- Frontend: React + TypeScript + Vite + Tailwind CSS
+- Backend: Spring Boot + Java + Maven
+- Database: MySQL
+- Authentication: JWT + BCrypt password hashing
+- API integration: Axios with API client and bearer-token auth
 
-## React Compiler
+## Project Structure
+- `src/` — frontend application and UI pages
+- `src/pages/` — auth, employee, and admin pages
+- `src/services/api/` — API and auth service layer
+- `src/routes/` — route guards and route configuration
+- `backend/` — Spring Boot backend application
+- `backend/src/main/java/com/dayflow/backend/` — Java controllers, services, repositories, and entities
+- `backend/src/main/resources/application.properties` — backend datasource and app config
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Frontend Setup
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+3. Frontend runs on:
+   ```text
+   http://localhost:5173
+   ```
 
-## Expanding the ESLint configuration
+## Backend Setup
+1. Go to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Build and run the Spring Boot app:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   On Windows:
+   ```bash
+   mvnw.cmd spring-boot:run
+   ```
+3. Backend runs on:
+   ```text
+   http://localhost:8080
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Environment Notes
+- The frontend expects the backend at `http://localhost:8080/api`.
+- The backend is configured for MySQL and expects the existing `dayflow` database.
+- Authentication is managed via JWT and persisted locally in the browser session storage/auth state.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## Demo Notes
+DayFlow is designed as a hackathon-ready HRMS prototype with employee self-service and HR operations workflows. The application is intended to run with the backend services up and connected to the configured MySQL instance.
