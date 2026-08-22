@@ -9,4 +9,7 @@ export interface User {
   role: Role
   designation?: string
   department?: string
+  phone?: string
+  address?: string
+  joiningDate?: string
 }
