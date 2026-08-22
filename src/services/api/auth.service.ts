@@ -1,3 +1,4 @@
+import axios from 'axios'
 import type { User, Role } from '@/types'
 import { apiClient } from './client'
 
@@ -18,47 +19,64 @@ export interface AuthResponse {
   token: string
 }
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
+type BackendAuthResponse = {
+  id: number | string
+  employeeId: string
+  email: string
+  role: Role | string
+  emailVerified: boolean
+  token: string
+}
+
+const normalizeRole = (role: string | Role): Role => {
+  if (role === 'ADMIN' || role === 'HR' || role === 'EMPLOYEE') return role
+  return 'EMPLOYEE'
+}
+
+const toUser = (response: BackendAuthResponse): User => {
+  const localPart = response.email.split('@')[0] ?? 'user'
+  const [firstNameSeed, ...rest] = localPart.split(/[._-]+/).filter(Boolean)
+  const firstName = (firstNameSeed ?? 'User').replace(/^./, (char) => char.toUpperCase())
+  const lastName = (rest.join(' ') || 'Employee').replace(/\b\w/g, (char) => char.toUpperCase())
+
+  return {
+    id: String(response.id),
+    employeeId: response.employeeId,
+    email: response.email,
+    firstName,
+    lastName,
+    role: normalizeRole(response.role),
+    designation: normalizeRole(response.role) === 'ADMIN' ? 'Administrator' : normalizeRole(response.role) === 'HR' ? 'HR Manager' : 'Employee',
+    department: normalizeRole(response.role) === 'HR' ? 'Human Resources' : 'Operations',
+  }
+}
+
+const getErrorMessage = (error: unknown): string => {
+  if (axios.isAxiosError(error)) {
+    const responseMessage = error.response?.data?.error ?? error.response?.data?.message ?? error.message
+    return typeof responseMessage === 'string' ? responseMessage : 'Request failed'
+  }
+
+  if (error instanceof Error) return error.message
+  return 'Request failed'
+}
 
 export const authService = {
   async login(payload: LoginPayload): Promise<AuthResponse> {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
-      const isAdmin = payload.email.includes('admin') || payload.email.includes('hr')
-      const mockUser: User = {
-        id: isAdmin ? 'usr_admin_1' : 'usr_emp_1',
-        employeeId: isAdmin ? 'EMP-001' : 'EMP-102',
-        email: payload.email,
-        firstName: isAdmin ? 'Admin' : 'John',
-        lastName: isAdmin ? 'Officer' : 'Doe',
-        role: isAdmin ? 'ADMIN' : 'EMPLOYEE',
-        designation: isAdmin ? 'HR Manager' : 'Software Engineer',
-        department: isAdmin ? 'Human Resources' : 'Engineering',
-      }
-      return { user: mockUser, token: 'mock-jwt-token-12345' }
+    try {
+      const response = await apiClient.post<BackendAuthResponse>('/auth/login', payload)
+      return { user: toUser(response.data), token: response.data.token }
+    } catch (error) {
+      throw new Error(getErrorMessage(error))
     }
-
-    const response = await apiClient.post<AuthResponse>('/auth/login', payload)
-    return response.data
   },
 
   async signup(payload: SignupPayload): Promise<AuthResponse> {
-    if (USE_MOCK) {
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
-      const mockUser: User = {
-        id: `usr_new_${Date.now()}`,
-        employeeId: payload.employeeId,
-        email: payload.email,
-        firstName: 'New',
-        lastName: 'Employee',
-        role: payload.role,
-      }
-      return { user: mockUser, token: 'mock-jwt-token-67890' }
+    try {
+      const response = await apiClient.post<BackendAuthResponse>('/auth/signup', payload)
+      return { user: toUser(response.data), token: response.data.token }
+    } catch (error) {
+      throw new Error(getErrorMessage(error))
     }
-
-    const response = await apiClient.post<AuthResponse>('/auth/signup', payload)
-    return response.data
   },
 }

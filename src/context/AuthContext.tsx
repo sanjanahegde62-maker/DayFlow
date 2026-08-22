@@ -1,5 +1,7 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { User } from '@/types'
+
+const STORAGE_KEY = 'dayflow_auth'
 
 interface AuthContextValue {
   user: User | null
@@ -11,8 +13,37 @@ interface AuthContextValue {
 const authContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [token, setToken] = useState<string | null>(null)
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === 'undefined') return null
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY)
+      return stored ? (JSON.parse(stored) as { user?: User | null }).user ?? null : null
+    } catch {
+      return null
+    }
+  })
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY)
+      return stored ? (JSON.parse(stored) as { token?: string | null }).token ?? null : null
+    } catch {
+      return null
+    }
+  })
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    if (user && token) {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ user, token }))
+      return
+    }
+
+    window.localStorage.removeItem(STORAGE_KEY)
+  }, [user, token])
 
   const setAuth = (nextUser: User, nextToken: string) => {
     setUser(nextUser)
