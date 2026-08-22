@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-teal-100 px-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-slate-200">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">DAYFLOW</h1>
@@ -47,19 +47,19 @@ export const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block text-xs font-semibold uppercase text-slate-600">
             Email Address
-            <input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@company.com" className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm" />
+            <input type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@company.com" className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
           </label>
           <label className="block text-xs font-semibold uppercase text-slate-600">
             Password
-            <input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm" />
+            <input type="password" required value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
           </label>
-          <button type="submit" disabled={loading} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 text-sm">
+          <button type="submit" disabled={loading} className="w-full bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 text-sm">
             {loading ? 'Signing in...' : <><LogIn className="w-4 h-4" /> Sign In</>}
           </button>
         </form>
 
         <div className="mt-6 text-center text-xs text-slate-500">
-          Don't have an account? <Link to="/signup" className="text-sky-600 font-semibold hover:underline">Sign Up</Link>
+          Don't have an account? <Link to="/signup" className="text-teal-600 font-semibold hover:text-teal-700 hover:underline">Sign Up</Link>
         </div>
       </div>
     </div>
