@@ -14,6 +14,7 @@ import { EmployeeLeave } from '@/pages/employee/EmployeeLeave'
 import { AdminLeave } from '@/pages/admin/AdminLeave'
 import { EmployeePayroll } from '@/pages/employee/EmployeePayroll'
 import { AdminPayroll } from '@/pages/admin/AdminPayroll'
+import { AdminReports } from '@/pages/admin/AdminReports'
 
 export function AppRoutes() {
   return (
@@ -39,7 +40,7 @@ export function AppRoutes() {
           <Route path="/admin/attendance" element={<AdminAttendance />} />
           <Route path="/admin/leave-approvals" element={<AdminLeave />} />
           <Route path="/admin/payroll" element={<AdminPayroll />} />
-          <Route path="/admin/reports" element={<div className="font-semibold text-xl text-slate-800">Reports &amp; Analytics</div>} />
+          <Route path="/admin/reports" element={<AdminReports />} />
         </Route>
       </Route>
 
