@@ -5,6 +5,7 @@ import com.dayflow.backend.entity.User;
 import com.dayflow.backend.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.dayflow.backend.dto.LoginRequest;
 
 import java.util.UUID;
 
@@ -57,5 +58,25 @@ public class AuthService {
         user.setVerificationToken(null);
 
         return userRepository.save(user);
+    }
+    public User login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new RuntimeException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        if (!user.isEmailVerified()) {
+            throw new RuntimeException("Email not verified");
+        }
+        String authToken = UUID.randomUUID().toString();
+        user.setAuthToken(authToken);
+
+        return userRepository.save(user);
+
+
     }
 }

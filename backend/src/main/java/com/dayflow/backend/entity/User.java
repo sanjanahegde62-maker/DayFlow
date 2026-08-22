@@ -28,6 +28,8 @@ public class User {
 
     @Column(unique = true)
     private String verificationToken;
+    @Column(unique = true)
+    private String authToken;
 
     public User() {
     }
@@ -89,5 +91,12 @@ public class User {
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
+    }
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }
